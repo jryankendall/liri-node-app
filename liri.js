@@ -25,14 +25,21 @@ if (argV.length >= 5) {
 var searchTerm = "";
 var cLog = console.log;
 
+//these API keys may become non-functional after several months, if so you can replace it with your own API key from the appropriate places
+var bandApiKey = "codingbootcamp";
+var movieApiKey = "trilogy";
+
+//Just prints arguments for reference
 setTimeout(function() {
     cLog("Command: " + commandArg + "\nQuery Arguments: " + queryArg);
 }, 100)
 
+
+//Called to search for concerts with command line arg 'concert-this'
 function getConcerts(artist) {
     axios({
         method : 'get',
-        url : "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"
+        url : "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=" + bandApiKey
     }).then(function(response){
         var data = response.data;
         cLog("You Searched For: " + artist + "\nResults:");
@@ -51,6 +58,12 @@ function getConcerts(artist) {
     });
 }
 
+function listCommands() {
+    cLog("Invalid command. Valid commands are: \nconcert-this\nspotify-this-song\nmovie-this\ndo-what-it-says\n--End of Line--\n");
+}
+
+//In order for this function to... function, you'll need a '.env' file in the same directory as this js file, with your ID and client secret.
+//An exaxmple file example.env file is here to assist
 function spotifyThis(search) {
     spotify.search({ type: 'track', query: search, limit: 1}, function(error, response) {
         if (error) {
@@ -58,34 +71,52 @@ function spotifyThis(search) {
         }
 
         var data = response.tracks.items;
-        cLog(response.tracks.items);
+        cLog(data);
     })
 }
 
+function movieThis(search) {
+    axios({
+        method: 'get',
+        url: "http://www.omdbapi.com/?apikey=" + movieApiKey + "&t=" + search
+    }).then(function(response){
+        var data = response.data;
+        cLog(data);
+    }).catch(function(error) {
+        cLog("Something went wrong\n------");
+        cLog(error);
+        cLog("-----");
+    });
+};
+
 if (commandArg == undefined) {
-    cLog("Invalid arguments received. Try again.");
+    listCommands();
     return false;
 } else {
     switch (commandArg) {
         case "concert-this":
+            if (queryArg == undefined) {
+                queryArg = "smash mouth";
+            }
             getConcerts(queryArg);
             break;
         case "spotify-this-song":
             if (queryArg == undefined) {
-                spotifyThis("the sign");
-            } else 
-            {
-                spotifyThis(queryArg);
+                queryArg = "the sign";
             }
+            spotifyThis(queryArg);
             break;
         case "movie-this":
+            if (queryArg == undefined) {
+                queryArg = "ed wood";
+            }
             movieThis(queryArg);
             break;
         case "do-what-it-says":
             doThis(queryArg);
             break;
         default:
-            cLog("Invalid command. Valid commands are: \nconcert-this\nspotify-this-song\nmovie-this\ndo-what-it-says\n--End of Line--\n");
+            listCommands();
             break;
     }
 }
