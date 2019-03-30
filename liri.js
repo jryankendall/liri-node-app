@@ -4,6 +4,8 @@ require("dotenv").config();
 var keys = require("./keys");
 var axios = require("axios");
 var moment = require("moment");
+var fs = require("fs");
+var constructs = require("./constructors");
 moment().format();
 
 var Spotify = require('node-spotify-api');
@@ -12,14 +14,8 @@ var spotify = new Spotify(keys.spotify);
 //Getting command line args
 var argV = process.argv;
 var commandArg = argV[2];
-var queryArg = argV[3];
+var queryArg = argV.slice(3, argV.length).join(" ").toLowerCase();
 
-//concats all extra command line args to the query in case the user doesnt use quotes around their search input, etc
-if (argV.length >= 5) {
-    for (var i = 4; i < argV.length; i++) {
-        queryArg += " " + argV[i];
-    }
-}
 
 //Setting up global vars
 var searchTerm = "";
@@ -30,9 +26,10 @@ var bandApiKey = "codingbootcamp";
 var movieApiKey = "trilogy";
 
 //Just prints arguments for reference
-setTimeout(function() {
+/* setTimeout(function() {
     cLog("Command: " + commandArg + "\nQuery Arguments: " + queryArg);
-}, 100)
+}, 100) */
+//Was just for testing purposes
 
 
 //Called to search for concerts with command line arg 'concert-this'
@@ -42,7 +39,6 @@ function getConcerts(artist) {
         url : "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=" + bandApiKey
     }).then(function(response){
         var data = response.data;
-        cLog("You Searched For: " + artist + "\nResults:");
         for (var x in data) {
             var concertTime = moment(data[x].datetime, "YYYY-MM-DDTHH:mm:ss");
             var concertVenue = data[x].venue;
@@ -63,15 +59,16 @@ function listCommands() {
 }
 
 //In order for this function to... function, you'll need a '.env' file in the same directory as this js file, with your ID and client secret.
-//An exaxmple file example.env file is here to assist
+//An example file example.env file is here to assist
 function spotifyThis(search) {
     spotify.search({ type: 'track', query: search, limit: 1}, function(error, response) {
         if (error) {
             return cLog(error);
         }
 
-        var data = response.tracks.items;
-        cLog(data);
+        var data = response.tracks.items[0];
+        var newSong = new constructs.Song(data);
+        newSong.printData();
     })
 }
 
@@ -81,7 +78,8 @@ function movieThis(search) {
         url: "http://www.omdbapi.com/?apikey=" + movieApiKey + "&t=" + search
     }).then(function(response){
         var data = response.data;
-        cLog(data);
+        var newMovie = new constructs.Movie(data);
+        newMovie.printData();
     }).catch(function(error) {
         cLog("Something went wrong\n------");
         cLog(error);
@@ -89,25 +87,25 @@ function movieThis(search) {
     });
 };
 
-if (commandArg == undefined) {
+if (commandArg == "" || commandArg == undefined) {
     listCommands();
     return false;
 } else {
     switch (commandArg) {
         case "concert-this":
-            if (queryArg == undefined) {
+            if (queryArg == undefined || queryArg == "") {
                 queryArg = "smash mouth";
             }
             getConcerts(queryArg);
             break;
         case "spotify-this-song":
-            if (queryArg == undefined) {
-                queryArg = "the sign";
+            if (queryArg == undefined || queryArg == "") {
+                queryArg = "all star";
             }
             spotifyThis(queryArg);
             break;
         case "movie-this":
-            if (queryArg == undefined) {
+            if (queryArg == undefined || queryArg == "") {
                 queryArg = "ed wood";
             }
             movieThis(queryArg);
