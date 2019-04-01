@@ -25,3 +25,5 @@ module.exports = {
     Movie,
     Song
 }
+
+//Wanted to make a constructor for the concerts list as well, but I wasn't sure about constructors inside loops, so I just played it safe.
