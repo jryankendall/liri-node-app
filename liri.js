@@ -36,11 +36,12 @@ var movieApiKey = 'trilogy';
 
 //Called to search for concerts with command line arg 'concert-this'
 function getConcerts(artist) {
+  var theArtist = artist.replace(/\x22|\x27/g, '');
   axios({
     method: 'get',
     url:
       'https://rest.bandsintown.com/artists/' +
-      artist +
+      theArtist +
       '/events?app_id=' +
       bandApiKey
   })
