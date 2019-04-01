@@ -26,7 +26,7 @@ Command line app that searches various APIs and returns information to the user 
 - In order to utilize the spotify API, the user must provide their own client ID and client secret, from the Spotify developer's site. These details must be placed into a `.env` file. An example env file is provided to demonstrate syntax.
 
 ## Examples Slideshow
-https://drive.google.com/open?id=1IPUkDYRlLVz8Yf10iRfpVbYMOgy8m3YLbwVDcWbnFv0
+https://docs.google.com/presentation/d/1IPUkDYRlLVz8Yf10iRfpVbYMOgy8m3YLbwVDcWbnFv0/edit?usp=sharing
 
 ## Contribution Guidelines
   This was built for a homework assignment and as such will likely not be edited later, but comments, critique, and suggestions are always welcome, for use in future work!
