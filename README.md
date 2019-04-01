@@ -25,6 +25,9 @@ Command line app that searches various APIs and returns information to the user 
 - In the liri-node-app directory, run `npm i` in order to retrieve the necessary modules indicated by package.json. Then, type `node liri.js`, followed by the command desired and then any query arguments desired. Typing `node liri.js` by itself will list the commands available to you.
 - In order to utilize the spotify API, the user must provide their own client ID and client secret, from the Spotify developer's site. These details must be placed into a `.env` file. An example env file is provided to demonstrate syntax.
 
+## Examples Slideshow
+https://drive.google.com/open?id=1IPUkDYRlLVz8Yf10iRfpVbYMOgy8m3YLbwVDcWbnFv0
+
 ## Contribution Guidelines
   This was built for a homework assignment and as such will likely not be edited later, but comments, critique, and suggestions are always welcome, for use in future work!
   
